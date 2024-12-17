@@ -8,7 +8,7 @@ class Solution:
         for i in range(len(nums)):
             if(nums[i]>0):#如果最小数都大于0，说明不可能有新的答案了，则直接返回答案
                 return ans
-            if(i>0 and nums[i]==nums[i-1]):#对于元素i进行去重
+            if(i>0 and nums[i]==nums[i-1]):#对于元素i进行去重, 不能有重复的三元组，但三元组内的元素是可以重复的！不能写nums[i]==nums[i+1](否则会导致三元组内元素无法重复）
                 continue
             j=i+1
             k=len(nums)-1
