@@ -13,8 +13,13 @@ class MonotonicQueue:#单调队列（队首最大，队尾最小）只维护区�
 
     #模拟push操作
     def push(self,value):
-        while(self.queue and self.queue[-1]<value):#如果当前需要push的元素大于队尾元素，则将
-            self.queue.
+        while(self.queue and self.queue[-1]<value):#如果当前需要push的元素大于队尾元素，则将队尾元素弹出（即类似栈的pop）
+            self.queue.pop()
+        self.queue.append(value)
+
+    def getMax(self)->int:
+        return self.queue[0]
+
 
 
 
@@ -28,6 +33,17 @@ class Solution:
 
         #O(n)算法：单调队列（队首最大，队尾最小）
         ans=[]
+        monotonicQueue=MonotonicQueue()
+        for i in range(k):
+            monotonicQueue.push(nums[i])
+        for i in range(k,len(nums)):
+            ans.append(monotonicQueue.getMax())
+            monotonicQueue.pop(nums[i-k])
+            monotonicQueue.push(nums[i])
+        ans.append(monotonicQueue.getMax())
+        return ans
+
+
 
 
 
