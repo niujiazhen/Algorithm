@@ -17,9 +17,9 @@ class Solution:
     def traversal(self, ans:List, cur:TreeNode)->None:#递归法前序遍历
         if(not cur):
             return
-        ans.append(cur.val)
         self.traversal(ans,cur.left)
         self.traversal(ans,cur.right)
+        ans.append(cur.val)
 
 
 
