@@ -14,7 +14,7 @@ class Solution:
         return ans
 
 
-    def traversal(self, ans:List, cur:TreeNode)->None:#递归法前序遍历
+    def traversal(self, ans:List, cur:TreeNode)->None:#递归法后序遍历
         if(not cur):
             return
         self.traversal(ans,cur.left)
