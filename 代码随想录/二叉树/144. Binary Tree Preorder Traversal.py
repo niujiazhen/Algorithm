@@ -10,16 +10,21 @@ class TreeNode:
 class Solution:
     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         ans=[]
-        self.traversal(ans,root)
+        self.recursiveTraversal(ans,root)#递归法前序遍历
+        self.iterativeTraversal()#迭代法前序遍历
         return ans
 
 
-    def traversal(self, ans:List, cur:TreeNode)->None:#递归法前序遍历
+    def recursiveTraversal(self, ans:List, cur:TreeNode)->None:#递归法前序遍历
         if(not cur):
             return
         ans.append(cur.val)
-        self.traversal(ans,cur.left)
-        self.traversal(ans,cur.right)
+        self.recursiveTraversal(ans,cur.left)
+        self.recursiveTraversal(ans,cur.right)
+
+    def iterativeTraversal(self, ans:List, cur:TreeNode)->None:#迭代法前序遍历
+
+
 
 
 
