@@ -10,16 +10,32 @@ class TreeNode:
 class Solution:
     def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         ans=[]
-        self.traversal(ans,root)
-        return ans
+        # self.recursiveTraversal(ans,root)#递归法后序遍历
+        # return ans
+        return self.iterativeTraversal(ans,root)#迭代法后序遍历
 
 
-    def traversal(self, ans:List, cur:TreeNode)->None:#递归法后序遍历
+    def recursiveTraversal(self, ans:List, cur:TreeNode)->None:#递归法后序遍历
         if(not cur):
             return
-        self.traversal(ans,cur.left)
-        self.traversal(ans,cur.right)
+        self.recursiveTraversal(ans,cur.left)
+        self.recursiveTraversal(ans,cur.right)
         ans.append(cur.val)
+
+    def iterativeTraversal(self, ans:List, root:TreeNode)->List[int]:#迭代法后序遍历
+        if(not root):
+            return []
+        stack=[root]
+        while(stack):#前序遍历迭代法处理顺序为中右左，后序遍历可以先将前序遍历转为中左右，再反转ans变为左右中即可
+            node=stack.pop()
+            ans.append(node.val)
+            if(node.left):
+                stack.append(node.left)
+            if(node.right):
+                stack.append(node.right)
+        return ans[::-1]
+
+
 
 
 

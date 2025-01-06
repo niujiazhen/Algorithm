@@ -10,16 +10,35 @@ class TreeNode:
 class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         ans=[]
-        self.traversal(ans,root)
+        # self.recursiveTraversal(ans,root)
+        self.iterativeTraversal(ans,root)
         return ans
 
 
-    def traversal(self, ans:List, cur:TreeNode)->None:#递归法中序遍历
+    def recursiveTraversal(self, ans:List, cur:TreeNode)->None:#递归法中序遍历
         if(not cur):
             return
-        self.traversal(ans,cur.left)
+        self.recursiveTraversal(ans,cur.left)
         ans.append(cur.val)
-        self.traversal(ans,cur.right)
+        self.recursiveTraversal(ans,cur.right)
+
+    def iterativeTraversal(self, ans:List, root:TreeNode)->None:#迭代法中序遍历
+        if not root:
+            return
+        cur=root#cur记录当前处理的节点
+        stack=[]#stack保存访问过的节点
+        while cur or stack:
+            if cur:#先迭代访问到最底层的左节点，并保存
+                stack.append(cur)
+                cur=cur.left
+            else:#开始处理当前节点
+                cur=stack.pop()#取出当前要处理的节点，这一步即处理左节点也处理中节点
+                ans.append(cur.val)#存入当前节点
+                cur=cur.right#处理栈顶元素右节点
+        return
+
+
+
 
 
 

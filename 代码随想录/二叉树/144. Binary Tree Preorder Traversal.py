@@ -10,8 +10,8 @@ class TreeNode:
 class Solution:
     def preorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         ans=[]
-        self.recursiveTraversal(ans,root)#递归法前序遍历
-        self.iterativeTraversal()#迭代法前序遍历
+        # self.recursiveTraversal(ans,root)#递归法前序遍历
+        self.iterativeTraversal(ans,root)#迭代法前序遍历
         return ans
 
 
@@ -22,8 +22,17 @@ class Solution:
         self.recursiveTraversal(ans,cur.left)
         self.recursiveTraversal(ans,cur.right)
 
-    def iterativeTraversal(self, ans:List, cur:TreeNode)->None:#迭代法前序遍历
-
+    def iterativeTraversal(self, ans:List, root:TreeNode)->None:#迭代法前序遍历
+        if(not root):
+            return
+        stack=[root]#利用栈来模拟递归
+        while(stack):
+            node=stack.pop()
+            ans.append(node.val)
+            if(node.right):#栈是先进后出，因此前序遍历要先放入右节点，后放入左节点，这样左节点先处理
+                stack.append(node.right)
+            if(node.left):
+                stack.append(node.left)
 
 
 
