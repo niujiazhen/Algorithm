@@ -16,21 +16,14 @@ class Solution:
         queue.append(root)
         while queue:
             size=len(queue)#当前层需要处理的节点
-            level_stack=[]#用于记录当前层的所有节点,stack反转了所有节点值
-            for i in range(size):#这一次循环拿出所有下一层节点，并记录值
-                node=queue[i]#拿到当前要处理的节点
+            for i in range(size):#这一次循环拿出所有下一层节点
+                node=queue.popleft()#拿到当前要处理的节点
+                node.left,node.right=node.right,node.left#交换节点
                 if node.left:
-                    level_stack.append(node.left.val)#记录当前节点左节点
-                    queue.append(node.left)#记录下一层要处理的节点
+                    queue.append(node.left)#将下一层要处理的节点放入queue
                 if node.right:
-                    level_stack.append(node.right.val)  # 记录当前节点右节点
-                    queue.append(node.right)#记录下一层要处理的节点
-            for i in range(size):#这一层遍历用于反转节点值
-                node=queue.popleft()
-                if node.left:
-                    node.left.val=level_stack.pop()#反转节点值
-                if node.right:
-                    node.right.val=level_stack.pop()#反转节点值
+                    queue.append(node.right)#将下一层要处理的节点放入queue
+
         return root
 
 
@@ -51,5 +44,9 @@ if __name__ == '__main__':
     treeNode2.right = treeNode5
     treeNode3.left = treeNode6
     treeNode3.right = treeNode7
+    #
+    # treeNode1 = TreeNode(1)
+    # treeNode2 = TreeNode(2)
+    # treeNode1.left=treeNode2
 
     print(solution.invertTree(treeNode1))
