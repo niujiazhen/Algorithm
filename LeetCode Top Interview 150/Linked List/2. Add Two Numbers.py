@@ -42,7 +42,7 @@ class Solution:
             else:
                 l1_val=0
             if l2:
-                l2_val=l1.val
+                l2_val=l2.val
             else:
                 l2_val=0
             sum=l1_val+l2_val+carry
