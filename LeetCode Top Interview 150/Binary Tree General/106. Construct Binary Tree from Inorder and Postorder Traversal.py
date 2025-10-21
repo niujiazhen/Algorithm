@@ -1,30 +1,28 @@
 # Definition for a binary tree node.
-from typing import List, Optional
-
-
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
+from typing import List, Optional
+
+
 class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
         #Divide and Conquer: T=O(n), S=O(n)
-        #the preorder keeps track of the element to construct the tree
+        #the postorder keeps track of the element to construct the tree
         def array_to_tree(left:int, right:int):
             nonlocal preorder_index
             if left > right:
                 return None
-            root_val = preorder[preorder_index]  # the root val
+            root_val = postorder.pop()  # the root val
             root = TreeNode(root_val)  # the current root node
-            preorder_index+=1
 
             # then we build the left and right subtrees
             # find the D&C boundries in inorder tree
             #build left and right subtrees
-            root.left=array_to_tree(left,inorder_index_map[root_val]-1)
             root.right=array_to_tree(inorder_index_map[root_val]+1,right)
-
+            root.left = array_to_tree(left, inorder_index_map[root_val] - 1)
             return root
 
 
@@ -34,10 +32,10 @@ class Solution:
         for index, value in enumerate(inorder):
             inorder_index_map[value] = index
 
-        return array_to_tree(0, len(preorder) - 1)
+        return array_to_tree(0, len(inorder) - 1)
+
 
 
 if __name__ == '__main__':
     solution=Solution()
-
-    print(solution.buildTree([3,9,20,15,7],[9,3,15,20,7]))
+    print(solution.buildTree([9,3,15,20,7],[9,15,7,20,3]))
