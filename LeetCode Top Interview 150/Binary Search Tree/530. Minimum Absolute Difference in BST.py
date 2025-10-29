@@ -1,5 +1,5 @@
 # Definition for a binary tree node.
-from typing import Optional
+from typing import Optional, List
 
 
 class TreeNode:
@@ -9,9 +9,20 @@ class TreeNode:
         self.right = right
 class Solution:
     def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        #we can get a sorted array if we do inorder traverse due to the property of Binary Search Tree
+        inorderList=[]
+        self.inOrderTraverse(root,inorderList)
+        minDiff=float('inf')
+        for i in range(len(inorderList)-1):
+            minDiff=min(minDiff,inorderList[i+1]-inorderList[i])
+        return minDiff
 
-
-
+    def inOrderTraverse(self,node:TreeNode,num:List[int]):
+        if not node:
+            return
+        self.inOrderTraverse(node.left,num)
+        num.append(node.val)
+        self.inOrderTraverse(node.right,num)
 
 
 
