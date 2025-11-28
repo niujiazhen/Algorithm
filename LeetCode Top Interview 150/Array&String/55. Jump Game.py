@@ -3,13 +3,11 @@ from typing import List
 
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        n=len(nums)
-        maxReach=0 #denotes the max element can reach
-
-        for i in range(n):
-            if i>maxReach:# the current element cannot be reached
+        maxReach=0#denotes the max index can reach currently
+        for i in range(len(nums)):
+            if i>maxReach:#means we cannot reach the current index from any index before i
                 return False
-            maxReach=max(maxReach,i+nums[i])
+            maxReach=max(i+nums[i],maxReach)
         return True
 
 
