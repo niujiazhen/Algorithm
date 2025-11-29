@@ -3,15 +3,16 @@ from typing import List
 
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        # T=O(n) S=O(1)
-        step=0
-        curEnd=curFar=0
+        #T=O(n),S=O(1)
+        step=0 #records the minimum jump
+        curEnd=0#denotes the furthest index can be reached by current jump
+        curFur=0#denotes the furthest index can be reached at current index(next jump)
 
         for i in range(len(nums)-1):
-            curFar=max(curFar,i+nums[i])# curFar denotes the furthest index can be reached
-            if i==curEnd:
+            curFur=max(curFur,i+nums[i])
+            if i==curEnd:#the last index i that we have to jump to reach curEnd,ensuring minimum steps
+                curEnd=curFur
                 step+=1
-                curEnd=curFar# curEnd denotes the next End Point to be reached at 1 jump
         return step
 
 
