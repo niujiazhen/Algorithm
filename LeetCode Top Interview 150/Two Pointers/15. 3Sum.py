@@ -3,6 +3,7 @@ from typing import List
 
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
+        #Two pointers T=O(n2) S=O(1)
         ans=[]
         nums.sort()
         for i in range(len(nums)):

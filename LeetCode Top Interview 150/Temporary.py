@@ -1,20 +1,41 @@
 from typing import List
 
 
-class Solution:
-    def maxArea(self, height: List[int]) -> int:
-        #Two pointers T=O(n) S=O(1)
-        l=0
-        r=len(height)-1
-        v=0
-        while l<r:
-            v=max(v,min(height[l],height[r])*(r-l))#we calculate the max volumn
-            if height[l]<height[r]:#this is because the volumn depend on the shorter side, only by adjust the shorter one, we have the chance to increase the volumn
-                l+=1
-            else:
-                r-=1
-        return v
+class MinStack:
+
+    def __init__(self):
+        self.stack=[]
+        self.minStack=[]#record the pop order of min element in the stack
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if not self.minStack or self.minStack[-1]>=val:
+            self.minStack.append(val)
+    def pop(self) -> None:
+        num=self.stack.pop()
+        if self.minStack[-1]==num:
+            self.minStack.pop()
+    def top(self) -> int:
+        return self.stack[-1]
+    def getMin(self) -> int:
+        return self.minStack[-1]
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(val)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
+
+
+
+
 
 if __name__ == '__main__':
-    solution=Solution()
-    print(solution.maxArea([1,8,6,2,5,4,8,3,7]))
+    minstack=MinStack()
+    minstack.push(-2)
+    minstack.push(0)
+    minstack.push(-3)
+    minstack.getMin()
+    minstack.pop()
+    minstack.top()
+    minstack.getMin()
