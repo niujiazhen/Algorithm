@@ -9,20 +9,21 @@ from typing import List, Optional
 
 class Solution:
     def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
-        #We use Divide and Conquer
-        #T=O(n) S=O(logn)
-        def buildBST(l:int,r:int)->TreeNode:
-            if l>r:
+        # We use Divide and Conquer
+        # T=O(n) S=O(logn)
+        def buildTree(left:int,right:int)->TreeNode:
+            if left>right:
                 return None
-            #we always choose the right middle num as the current node
-            mid=(l+r)//2
-            node=TreeNode(nums[mid])
-            node.left=buildBST(l,mid-1)
-            node.right=buildBST(mid+1,r)
-            return node
-        return buildBST(0,len(nums)-1)
+            p=(left+right)//2# we divide the problem at the middle left point
+            treeNode=TreeNode(nums[p])
+            #Divide and Conquer
+            treeNode.left=buildTree(left,p-1)
+            treeNode.right=buildTree(p+1,right)
+
+            return treeNode
 
 
+        return buildTree(0,len(nums)-1)
 
 
 if __name__ == '__main__':
