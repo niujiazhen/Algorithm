@@ -25,10 +25,10 @@ class Solution:
         fast=slow=head
         midPrev=None#the node before mid node
         while fast and fast.next:
-            prev=slow
+            midPrev=slow
             slow=slow.next
             fast=fast.next.next
-        prev.next=None#truncate the LinkedList to two list
+        midPrev.next=None#truncate the LinkedList to two list
         return slow
     def merge(self,list1:ListNode,list2:ListNode)->ListNode:
         #merge two sorted list into one list

@@ -1,30 +1,70 @@
-# Definition for a binary tree node.
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
         self.val = val
-        self.left = left
-        self.right = right
-from typing import List, Optional
+        self.next = next
+from typing import Optional
 
 
 class Solution:
-    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
-        # We use Divide and Conquer
-        def buildTree(left:int,right:int)->TreeNode:
-            if left>right:
-                return None
-            p=(left+right)//2# we divide the problem at the middle left point
-            treeNode=TreeNode(nums[p])
-            #Divide and Conquer
-            treeNode.left=buildTree(left,p-1)
-            treeNode.right=buildTree(p+1,right)
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        #Merge Sort: T=O(nlogn) S=O(logn)
+        #We use Divide and Conquer
+        def getMid(node:ListNode)->ListNode:
+            #We use fast and slow pointer to get the midNode and truncate the LinkedList into two equal parts
+            fast=slow=head
+            midPrev=None#the node before midNode
+            while fast and fast.next:
+                midPrev=slow
+                slow=slow.next
+                fast=fast.next.next
+            midPrev.next=None#truncate the LinkedList
+            return slow
 
-            return treeNode
+        def merge(node1:ListNode,node2:ListNode)->ListNode:
+            dummy_head=ListNode(-1)
+            cur=dummy_head
+            while node1 and node2:
+                if node1.val<node2.val:
+                    cur.next=node1
+                    node1=node1.next
+                else:
+                    cur.next=node2
+                    node2=node2.next
+                cur=cur.next
+            if node1:
+                cur.next=node1
+            else:
+                cur.next=node2
+            return dummy_head.next
+
+        #Edge Case:if the LinkedList size is 1 or 0, just return the original node
+        if not head or head.next is None:
+            return head
+
+        #Divide
+        mid=getMid(head)
+        #Conquer
+        leftLinkedList=self.sortList(head)
+        rightLinkedList=self.sortList(mid)
+        #Combine
+        return merge(leftLinkedList,rightLinkedList)
 
 
-        return buildTree(0,len(nums)-1)
+
+
+
+
+
 
 
 if __name__ == '__main__':
     solution=Solution()
-    print(solution.sortedArrayToBST([-10,-3,0,5,9]))
+    node1=ListNode(4)
+    node2=ListNode(2)
+    node3=ListNode(1)
+    node4=ListNode(3)
+    node1.next=node2
+    node2.next=node3
+    node3.next=node4
+    print(solution.sortList(node1))
