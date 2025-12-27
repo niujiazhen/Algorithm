@@ -1,70 +1,20 @@
-# Definition for singly-linked list.
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-from typing import Optional
+from typing import List
 
 
 class Solution:
-    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        #Merge Sort: T=O(nlogn) S=O(logn)
-        #We use Divide and Conquer
-        def getMid(node:ListNode)->ListNode:
-            #We use fast and slow pointer to get the midNode and truncate the LinkedList into two equal parts
-            fast=slow=head
-            midPrev=None#the node before midNode
-            while fast and fast.next:
-                midPrev=slow
-                slow=slow.next
-                fast=fast.next.next
-            midPrev.next=None#truncate the LinkedList
-            return slow
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        #T=O(n2) S=O(n)
+        # We define DP[i] as the longest strictly increasing subsequence in nums[0:i+1]
+        DP=[1]*len(nums)
 
-        def merge(node1:ListNode,node2:ListNode)->ListNode:
-            dummy_head=ListNode(-1)
-            cur=dummy_head
-            while node1 and node2:
-                if node1.val<node2.val:
-                    cur.next=node1
-                    node1=node1.next
-                else:
-                    cur.next=node2
-                    node2=node2.next
-                cur=cur.next
-            if node1:
-                cur.next=node1
-            else:
-                cur.next=node2
-            return dummy_head.next
-
-        #Edge Case:if the LinkedList size is 1 or 0, just return the original node
-        if not head or head.next is None:
-            return head
-
-        #Divide
-        mid=getMid(head)
-        #Conquer
-        leftLinkedList=self.sortList(head)
-        rightLinkedList=self.sortList(mid)
-        #Combine
-        return merge(leftLinkedList,rightLinkedList)
-
-
-
-
-
-
-
+        for i in range(1,len(nums)):
+            for j in range(i):
+                #Check all pre numbers
+                if nums[i]>nums[j]:
+                    DP[i]=max(DP[i],DP[j]+1)
+        return max(DP)
 
 
 if __name__ == '__main__':
     solution=Solution()
-    node1=ListNode(4)
-    node2=ListNode(2)
-    node3=ListNode(1)
-    node4=ListNode(3)
-    node1.next=node2
-    node2.next=node3
-    node3.next=node4
-    print(solution.sortList(node1))
+    print(solution.lengthOfLIS([10,9,2,5,3,7,101,18]))
