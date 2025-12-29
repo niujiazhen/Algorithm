@@ -1,37 +1,28 @@
-import heapq
-from typing import List
-
-
 class Solution:
-    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
-        # We use minHeap + Dij-like Algorithm
-        minHeap=[]# to store currently possible minimum pairs
-        visited=set()# to avoid duplicated pairs
+    def romanToInt(self, s: str) -> int:
+        # T=O(n) S=O(1)
+        dict={}
+        dict["I"]=1
+        dict["V"]=5
+        dict["X"]=10
+        dict["L"]=50
+        dict["C"]=100
+        dict["D"]=500
+        dict["M"]=1000
 
-        heapq.heappush(minHeap,(nums1[0]+nums2[0],0,0))# the minimum pair must be nums1[0]+nums2[0] because two lists are sorted
-        visited.add((nums1[0]+nums2[0],0,0))
+        totalSum=dict[s[-1]]#to add the last number
 
-        ans=[]# to store the minimum k pairs
-        m=len(nums1)
-        n=len(nums2)
+        for i in range(len(s)-1,0,-1):
+            if dict[s[i-1]]<dict[s[i]]:
+                totalSum-=dict[s[i-1]]
+            else:
+                totalSum+=dict[s[i-1]]
 
-        while len(ans)<k:
-            # We first get the currently minimum pair from minHeap
-            currentPairSum,i,j=heapq.heappop(minHeap)
-            ans.append([nums1[i],nums2[j]])
+        return totalSum
 
-            #we append the two possible next minimum pairs
-            if i+1<m and (nums1[i+1]+nums2[j],i+1,j) not in visited:
-                heapq.heappush(minHeap,(nums1[i+1]+nums2[j],i+1,j))
-                visited.add((nums1[i+1]+nums2[j],i+1,j))
-            if j+1<n and (nums1[i]+nums2[j+1],i,j+1) not in visited:
-                heapq.heappush(minHeap,(nums1[i]+nums2[j+1],i,j+1))
-                visited.add((nums1[i]+nums2[j+1],i,j+1))
-
-        return ans
 
 
 
 if __name__ == '__main__':
     solution=Solution()
-    print(solution.kSmallestPairs([1,7,11],[2,4,6],3))
+    print(solution.romanToInt("MCMXCIV"))
