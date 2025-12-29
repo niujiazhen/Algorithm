@@ -1,28 +1,31 @@
 class Solution:
-    def romanToInt(self, s: str) -> int:
-        # T=O(n) S=O(1)
-        dict={}
-        dict["I"]=1
-        dict["V"]=5
-        dict["X"]=10
-        dict["L"]=50
-        dict["C"]=100
-        dict["D"]=500
-        dict["M"]=1000
+    def convert(self, s: str, numRows: int) -> str:
+        #T=O(n) S=O(n)
+        #Edge Case
+        if numRows==1:
+            return s
 
-        totalSum=dict[s[-1]]#to add the last number
+        strRows=[""]*numRows# represent each rows' chararcters
+        index=0# denotes the index of strRows
+        direction=1# indicates the direction: 1 means moving down 2 means moving up
 
-        for i in range(len(s)-1,0,-1):
-            if dict[s[i-1]]<dict[s[i]]:
-                totalSum-=dict[s[i-1]]
-            else:
-                totalSum+=dict[s[i-1]]
+        for char in s:
+            strRows[index]+=char
 
-        return totalSum
+            #change the direction
+            if index==0:
+                direction=1
+            elif index==numRows-1:
+                direction=-1
+
+            #change the insert row
+            index+=direction
+
+        return "".join(strRows)
 
 
 
 
 if __name__ == '__main__':
     solution=Solution()
-    print(solution.romanToInt("MCMXCIV"))
+    print(solution.convert("PAYPALISHIRING",3))

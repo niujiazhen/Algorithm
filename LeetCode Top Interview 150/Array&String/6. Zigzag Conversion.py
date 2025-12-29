@@ -1,29 +1,27 @@
 class Solution:
     def convert(self, s: str, numRows: int) -> str:
-        rows=numRows
-        cols=len(s)
-        matrix = [["" for _ in range(cols)] for _ in range(rows)]
+        #T=O(n) S=O(n)
+        #Edge Case
+        if numRows==1:
+            return s
 
-        i=0
-        cur_x=cur_y=0
-        while i<len(s):
-            while i<len(s) and cur_y<rows:
-                matrix[cur_y][cur_x]=s[i]
-                cur_y+=1
-                i+=1
-            cur_x=min(cur_x+1,cols-1)
-            cur_y=max(cur_y-2,0)
-            while i<len(s) and cur_y>0:
-                matrix[cur_y][cur_x]=s[i]
-                cur_x+=1
-                cur_y-=1
-                i+=1
-        strAns=""
-        for i in range(rows):
-            for j in range(cols):
-                if matrix[i][j]!="":
-                    strAns+=matrix[i][j]
-        return strAns
+        strRows=[""]*numRows# represent each rows' chararcters
+        index=0# denotes the index of strRows
+        direction=1# indicates the direction: 1 means moving down 2 means moving up
+
+        for char in s:
+            strRows[index]+=char
+
+            #change the direction
+            if index==0:
+                direction=1
+            elif index==numRows-1:
+                direction=-1
+
+            #change the insert row
+            index+=direction
+
+        return "".join(strRows)
 
 
 
