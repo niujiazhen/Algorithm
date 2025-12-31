@@ -1,31 +1,39 @@
+from typing import List
+
+
 class Solution:
-    def convert(self, s: str, numRows: int) -> str:
-        #T=O(n) S=O(n)
-        #Edge Case
-        if numRows==1:
-            return s
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        #Two pointers T=O(n2) S=O(1)
+        nums.sort()
+        ans=[]
+        n=len(nums)
 
-        strRows=[""]*numRows# represent each rows' chararcters
-        index=0# denotes the index of strRows
-        direction=1# indicates the direction: 1 means moving down 2 means moving up
+        # We first fix one number
+        for i in range(n-2):
+            if nums[i]>0:
+                break
+            if i>0 and nums[i]==nums[i-1]:# remove the duplicated elements of first number
+                continue
+            l=i+1
+            r=n-1
+            while l<r:
+                sum=nums[i]+nums[l]+nums[r]
+                if sum>0:
+                    r-=1
+                elif sum<0:
+                    l+=1
+                else:
+                    ans.append([nums[i],nums[l],nums[r]])
+                    while l<r and nums[l]==nums[l+1]:
+                        l+=1
+                    while l<r and nums[r]==nums[r-1]:
+                        r-=1
+                    l+=1
+                    r-=1
 
-        for char in s:
-            strRows[index]+=char
-
-            #change the direction
-            if index==0:
-                direction=1
-            elif index==numRows-1:
-                direction=-1
-
-            #change the insert row
-            index+=direction
-
-        return "".join(strRows)
-
-
+        return ans
 
 
 if __name__ == '__main__':
     solution=Solution()
-    print(solution.convert("PAYPALISHIRING",3))
+    print(solution.threeSum([-1,0,1,2,-1,-4]))
