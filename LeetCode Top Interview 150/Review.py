@@ -1,26 +1,39 @@
-from typing import List
+class MinStack:
+
+    def __init__(self):
+        self.stack=[]
+        self.minStack=[]
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if not self.minStack or self.minStack[-1]>=val:
+            self.minStack.append(val)
+
+    def pop(self) -> None:
+        t=self.stack.pop()
+        if self.minStack[-1]==t:
+            self.minStack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+    def getMin(self) -> int:
+        return self.minStack[-1]
 
 
-class Solution:
-    def longestConsecutive(self, nums: List[int]) -> int:
-        maxLen=0
-        hash=set(nums)
-        for num in hash:
-            if num-1 not in hash:# means current num is the start of a sequence
-                curNum=num
-                curLen=1
-                while curNum+1 in hash:
-                    curNum+=1
-                    curLen+=1
-                maxLen=max(maxLen,curLen)
-
-        return maxLen
-
-
-
-
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(val)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
 
 
 if __name__ == '__main__':
-    solution=Solution()
-    print(solution.longestConsecutive([100,4,200,1,3,2]))
+    minstack=MinStack()
+    minstack.push(-2)
+    minstack.push(0)
+    minstack.push(-3)
+    minstack.getMin()
+    minstack.pop()
+    minstack.top()
+    minstack.getMin()
