@@ -8,20 +8,20 @@ from typing import Optional
 
 class Solution:
     def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        dummy_head=ListNode()#use dummy head to avoid checking edge cases
-        dummy_head.next=head
-        cur=dummy_head
-        while cur.next:
-            isDelete=0#represent whethere to delete the node
-            while cur.next.next and cur.next.val==cur.next.next.val:#this loop could remove duplicated element
-                cur.next=cur.next.next
-                isDelete=1
-            if isDelete:#if we find duplicated elements, we have to remove the first one
-                cur.next=cur.next.next
-            else:
-                cur=cur.next#otherwise just move forward
-        return dummy_head.next
+        dummy_head=ListNode(-1,head)
+        prev=dummy_head
+        cur=dummy_head.next
 
+        while cur:
+            if cur.next and cur.val==cur.next.val:#If we find duplicated nums
+                num=cur.val# records the duplicated value
+                while cur and cur.val==num:
+                    cur=cur.next
+                prev.next=cur
+            else:
+                prev=cur
+                cur=cur.next
+        return dummy_head.next
 
 
 
