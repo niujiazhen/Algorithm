@@ -1,67 +1,40 @@
-class DoublyListNode:
-    def __init__(self,key,val):
-        self.key=key
-        self.val=val
-        self.next=None
-        self.prev=None
-
-class LRUCache:
-
-    def __init__(self, capacity: int):
-        self.capacity=capacity
-        self.dict={}# to store key->DoublyListNode
-        self.head=DoublyListNode(-1,-1)
-        self.tail=DoublyListNode(-1,-1)
-        self.head.next=self.tail
-        self.tail.prev=self.head
-
-    def get(self, key: int) -> int:
-        if key not in self.dict:
-            return -1
-        node=self.dict[key]
-        self.remove(node)
-        self.add(node)
-        return node.val
+# Definition for a binary tree node.
+from typing import List, Optional
 
 
-    def put(self, key: int, value: int) -> None:
-        if key in self.dict:# renew it
-            nodeToDelete=self.dict[key]
-            self.remove(nodeToDelete)
-        nodeToAdd=DoublyListNode(key,value)
-        self.add(nodeToAdd)
-        self.dict[key]=nodeToAdd
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        #Divide and Conquer: T=O(n), S=O(n)
+        #the preorder keeps track of the element to construct the tree
+        inOrderMap={}# records the value->key map for inorderList
+        for i in range(len(inorder)):
+            inOrderMap[inorder[i]]=i
 
-        #check capacity
-        if len(self.dict)>self.capacity:
-            nodeToDelete=self.head.next
-            self.remove(nodeToDelete)
-            del self.dict[nodeToDelete.key]
+        def buildSubTree(left:int, right:int)->TreeNode:
+            nonlocal preOrderIndex
+            if left>right:
+                return None
+            # Create the node
+            nodeValue=preorder[preOrderIndex]
+            node=TreeNode(nodeValue)
+            preOrderIndex+=1
 
-    def add(self, node):
-        prev=self.tail.prev# the real tail element in LRU
-        prev.next=node
-        node.prev=prev
-        node.next=self.tail
-        self.tail.prev=node
+            # Recursively create the subtrees
+            node.left=buildSubTree(left,inOrderMap[nodeValue]-1)
+            node.right=buildSubTree(inOrderMap[nodeValue]+1,right)
 
-    def remove(self, node):
-        node.prev.next=node.next
-        node.next.prev=node.prev
+            return node
 
-# Your LRUCache object will be instantiated and called as such:
-# obj = LRUCache(capacity)
-# param_1 = obj.get(key)
-# obj.put(key,value)
+        return buildSubTree(0,len(preorder)-1)
+
+
 
 if __name__ == '__main__':
-    LRU=LRUCache(2)
-    LRU.put(1,1)
-    LRU.put(2,2)
-    LRU.get(1)
-    LRU.put(3, 3)
-    LRU.get(2)
-    LRU.put(4, 4)
-    LRU.get(1)
-    LRU.get(3)
-    LRU.get(4)
+    solution=Solution()
+
+    print(solution.buildTree([3,9,20,15,7],[9,3,15,20,7]))

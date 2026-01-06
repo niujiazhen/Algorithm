@@ -11,29 +11,24 @@ class Solution:
     def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
         #Divide and Conquer: T=O(n), S=O(n)
         #the postorder keeps track of the element to construct the tree
-        def array_to_tree(left:int, right:int):
-            nonlocal preorder_index
-            if left > right:
+        inOrderMap={}
+        for i in range(len(inorder)):
+            inOrderMap[inorder[i]]=i
+
+        def buildSubTree(left:int, right:int)->TreeNode:
+            if left>right:
                 return None
-            root_val = postorder.pop()  # the root val
-            root = TreeNode(root_val)  # the current root node
+            # the root node is at the end of postOrder
+            nodeValue=postorder.pop()
+            node=TreeNode(nodeValue)
 
-            # then we build the left and right subtrees
-            # find the D&C boundries in inorder tree
-            #build left and right subtrees
-            root.right=array_to_tree(inorder_index_map[root_val]+1,right)
-            root.left = array_to_tree(left, inorder_index_map[root_val] - 1)
-            return root
+            # We create the right subtree first because of postOrder
+            node.right=buildSubTree(inOrderMap[nodeValue]+1,right)
+            node.left=buildSubTree(left,inOrderMap[nodeValue]-1)
 
+            return node
 
-        preorder_index=0
-        #build a hashmap to store value->index of inorder tree
-        inorder_index_map={}
-        for index, value in enumerate(inorder):
-            inorder_index_map[value] = index
-
-        return array_to_tree(0, len(inorder) - 1)
-
+        return buildSubTree(0,len(inorder)-1)
 
 
 if __name__ == '__main__':
