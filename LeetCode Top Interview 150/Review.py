@@ -1,40 +1,56 @@
 # Definition for a binary tree node.
-from typing import List, Optional
-
-
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
 class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        #Divide and Conquer: T=O(n), S=O(n)
-        #the preorder keeps track of the element to construct the tree
-        inOrderMap={}# records the value->key map for inorderList
-        for i in range(len(inorder)):
-            inOrderMap[inorder[i]]=i
+    def __init__(self):
+        self.ans = None#record the ans
 
-        def buildSubTree(left:int, right:int)->TreeNode:
-            nonlocal preOrderIndex
-            if left>right:
-                return None
-            # Create the node
-            nodeValue=preorder[preOrderIndex]
-            node=TreeNode(nodeValue)
-            preOrderIndex+=1
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        self.recurse_tree(root,p,q)
+        return self.ans
 
-            # Recursively create the subtrees
-            node.left=buildSubTree(left,inOrderMap[nodeValue]-1)
-            node.right=buildSubTree(inOrderMap[nodeValue]+1,right)
+    def recurse_tree(self,node:TreeNode,p:TreeNode,q:TreeNode)->bool:
+        #T=O(n), S=O(n)
+        #Edge Case
+        if not node:
+            return False
+        # Recursively traverse left and right tree
+        left=self.recurse_tree(node.left,p,q)
+        right=self.recurse_tree(node.right,p,q)
 
-            return node
+        mid=0
+        if node==p or node==q:
+            mid=1
 
-        return buildSubTree(0,len(preorder)-1)
+        if mid+left+right>=2:
+            self.ans=node
+
+        return left or right or mid
 
 
 
 if __name__ == '__main__':
     solution=Solution()
+    node1=TreeNode(3)
+    node2=TreeNode(5)
+    node3=TreeNode(1)
+    node4=TreeNode(6)
+    node5=TreeNode(2)
+    node6=TreeNode(0)
+    node7=TreeNode(8)
+    node8=TreeNode(7)
+    node9=TreeNode(4)
 
-    print(solution.buildTree([3,9,20,15,7],[9,3,15,20,7]))
+    node1.left=node2
+    node1.right=node3
+    node2.left=node4
+    node2.right=node5
+    node3.left=node6
+    node3.right=node7
+    node5.left=node8
+    node5.right=node9
+    print(solution.lowestCommonAncestor(node1,node2,node3))

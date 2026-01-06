@@ -13,36 +13,29 @@ class Node:
 
 class Solution:
     def connect(self, root: Node) -> Node:
-    #we use the level order to connect each node's next pointer to its next right node
-    # T=O(n), S=O(n)
+        # we use the level order to connect each node's next pointer to its next right node
+        # T=O(n), S=O(n)
+        # Edge Case
         if not root:
             return None
+
         queue=deque()
         queue.append(root)
-        size=1#record the number of nodes we should handle of current level
+        size=1# records the number of nodes shoule be deal with in current level
+
         while queue:
-            current_level_node=[]
+            formerNode=None
             for i in range(size):
                 node=queue.popleft()
-                # current_level_node.append(node)# we don't need this, and we can optimize like the following
-                if i<size-1:
-                    node.next=queue[0]#the first element of queue is the right next node of current node
-                else:
-                    node.next=None
+                if formerNode:
+                    formerNode.next=node
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
-            #now we get the node of current level, and then we connect each node to its next right node
-            # for i in range(len(current_level_node)):
-            #     if i<len(current_level_node)-1:
-            #         current_level_node[i].next=current_level_node[i+1]
-            #     else:
-            #         current_level_node[i]=None
-
-            #but we can optimize this loop
-
+                formerNode=node
             size=len(queue)
+
         return root
 
 

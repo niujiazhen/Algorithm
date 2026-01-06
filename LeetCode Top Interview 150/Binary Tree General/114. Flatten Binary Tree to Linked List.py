@@ -28,6 +28,21 @@ class Solution:
             preOrder[i].right=preOrder[i+1]
         return root
 
+        # Use recursive Traverse to flat the tree
+        # T=O(n), S=O(n)
+        preOrder = []
+        self.preOrderTraverse(root, preOrder)
+        for i in range(len(preOrder) - 1):
+            preOrder[i].left = None
+            preOrder[i].right = preOrder[i + 1]
+
+    def preOrderTraverse(self, root: TreeNode, preOrder: List[TreeNode]) -> None:
+        if not root:
+            return None
+        preOrder.append(root)
+        self.preOrderTraverse(root.left, preOrder)
+        self.preOrderTraverse(root.right, preOrder)
+
 
 
 if __name__ == '__main__':
