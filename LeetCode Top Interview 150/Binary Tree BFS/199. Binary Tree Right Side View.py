@@ -12,22 +12,25 @@ class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         #We use level order traverse to see the right side element of each level
         #T=O(n), S=O(N/2) in worst case
+        # Edge Case
         if not root:
             return []
         queue=deque()
+        ans=[] # to store the right side nodes
+        size=1
         queue.append(root)
-        size=1#record the number of nodes to handle in current level
-        ans=[]
+
         while queue:
+            node=None
             for i in range(size):
                 node=queue.popleft()
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
-                if i == size-1:
-                    ans.append(node.val)
+            ans.append(node.val)
             size=len(queue)
+
         return ans
 
 

@@ -18,6 +18,7 @@ class Solution:
         # return inorderList[k-1]
 
         #Method2: we only have to traverse the first k th element
+        #T=O(k), S=O(k)
         stack=[]
         while True:
             while root:
