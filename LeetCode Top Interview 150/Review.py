@@ -1,52 +1,29 @@
-from collections import defaultdict
+from collections import deque
 from typing import List
 
 
 class Solution:
-    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
-        #T=O(m*n) S=O(n) n=len of equations, m=len of queries
-        graph=defaultdict(defaultdict)#the graph represented as an adjacency list   graph[a][b] = value means a / b = value
+    def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+        # Initialize a BFS queue with the starting gene and 0 mutations so far
+        queue=deque()
+        queue.append((start,0))
+        visited=set()
+        visited.add(start)
 
-        def backtrack_evaluate(currentNode:str, targetNode:str, product:float, visited:set)->int:
-            visited.add(currentNode)
-            neighbors=graph[currentNode]
-            res=-1# We assume the ans does not exist
+        while queue:
+            # pop the current str
+            node,steps=queue.popleft()
+            if node==end:
+                return steps
+            for char in "ACGT":
+                for i in range(len(node)):
+                    newNode=node[:i]+char+node[i+1:]
+                    if newNode not in visited and newNode in bank:
+                        queue.append((newNode,steps+1))
+                        visited.add(newNode)
 
-            if targetNode in neighbors:
-                res=product*neighbors[targetNode]
-            else:
-                #explore all neighbor recursively
-                for neighbor in neighbors:
-                    if neighbor in visited:
-                        continue
-                    res=backtrack_evaluate(neighbor,targetNode,product*neighbors[neighbor],visited)
-                    if res!=-1:
-                        break# we find the path
-            visited.remove(currentNode)
-            return res
-        #Step1: build the graph from given equations and values
-        for equation,value in zip(equations,values):
-            graph[equation[0]][equation[1]]=value
-            graph[equation[1]][equation[0]]=1/value
-
-        #Step2: answer each query using DFS search
-        result=[]
-        for (dividend,divisor) in queries:
-            if dividend not in graph or divisor not in graph:
-                result.append(-1)
-            elif dividend==divisor:
-                result.append(1)
-            else:
-                visited=set()
-                result.append(backtrack_evaluate(dividend,divisor,1,visited))
-
-        return result
-
-
-
-
-
+        return -1
 
 if __name__ == '__main__':
     solution=Solution()
-    print(solution.calcEquation([["a","b"],["b","c"]],[2.0,3.0],[["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]))
+    print(solution.minMutation("AACCTTGG", "AATTCCGG", ["AATTCCGG","AACCTGGG","AACCCCGG","AACCTACC"]))
