@@ -17,7 +17,7 @@ def removeNthFromEnd(head: ListNode, n: int)->ListNode:
     for i in range(n):
         fast=fast.next
 
-    while ast.next:
+    while fast.next:
         fast=fast.next
         slow=slow.next
 
