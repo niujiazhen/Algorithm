@@ -1,25 +1,22 @@
-class Solution:
-    def lengthOfLongestSubstring(self, s: str) -> int:
-        # Edge Case
-        if not s:
-            return 0
+def lengthOfLongestSubString(s:str)->int:
+    # Edge Case
+    if not s:
+        return 0
 
-        # Basic Solution：Two Pointers
-        # T=O(n) S=O(n)
-        l=0
-        hash=set()# record appearance of characters in current sliding window
-        maxLen=0
-        for r in range(len(s)):
-            while s[r] in hash:# 若当前字符在set中，则从左不停清除字符，直至当前字符不在set中
-                hash.remove(s[l])
-                l+=1
-            hash.add(s[r])
-            maxLen=max(maxLen,len(hash))
+    # 双指针+Set实现
+    # T=O(n), S=O(n)
+    hash=set()
+    l=0# l指针记录从左往右起第一个在set中的元素
+    maxLen=0
+    for r in range(len(s)):# 遍历r指针
+        while s[r] in hash:# 若当前元素在set中，则不停删除最左侧的元素直至r元素加入
+            hash.remove(s[l])
+            l+=1
+        hash.add(s[r])
+        maxLen=max(maxLen,len(hash))
 
-        return maxLen
+    return maxLen
 
 
-if __name__ == '__main__':
-    solution=Solution()
-    print(solution.lengthOfLongestSubstring("qrsvbspk"))
-    
+
+print(lengthOfLongestSubString("abcabcbb"))
