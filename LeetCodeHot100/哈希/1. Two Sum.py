@@ -1,6 +1,7 @@
 from typing import List
 
 def twoSum(nums: List[int], target: int)->List[int]:
+    # T=O(n) S=O(n)
     hash={}# 存储value->index
     for i in range(len(nums)):
         if target-nums[i] in hash:# 如果当前nums[i]需要的数字在hash中，直接返回答案

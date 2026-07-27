@@ -1,53 +1,35 @@
-class DoublyLinkedList:
-    def __init__(self, key: int, val: int):  # 用于实现O(1)增加、修改、删除节点
-        self.key = key
-        self.val = val
-        self.prev = None
-        self.next = None
+from typing import List
 
 
-class LRUCache:
+def longestConsecutive(nums: List[int]) -> int:
+    # Edge Case
+    if not nums:
+        return 0
 
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.dict = {}  # 用于O(1)查找节点，存储key->DoublyLinkedList，便于直接找到节点
-        self.head = DoublyLinkedList(-1, -1)  # 虚拟头节点
-        self.tail = DoublyLinkedList(-1, -1)  # 虚拟尾节点
-        self.head.next = self.tail
-        self.tail.prev = self.head
+    # Basic Solution
+    # T=O(n) S=O(n)
+    hash=set()# 记录出现过的数字
+    maxLen=1# 记录最大长度，至少是1
 
-    def get(self, key: int) -> int:
-        if key not in self.dict:  # 若不存在则返回-1
-            return -1
-        nodeToGet = self.dict[key]
-        # 先删除再新增，从而更新LRU
-        self.remove(nodeToGet)
-        self.add(nodeToGet)
-        # 最后返回val
-        return nodeToGet.val
+    # 记录哪些数字出现过
+    for i in range(len(nums)):
+        hash.add(nums[i])
 
-    def put(self, key: int, value: int) -> None:
-        if key in self.dict:  # 如果存在这个key
-            nodeToModify = self.dict[key]
-            self.remove(nodeToModify)
-        # 新增这个节点
-        newNode = DoublyLinkedList(key, value)
-        self.add(newNode)
-        self.dict[key] = newNode
+    # 检测最长连续序列
+    for num in hash:
+        # 剪枝操作：当num为某个序列开头，则开始检测
+        if num-1 not in hash:
+            curLen=0
+            while num in hash:# 这些连续的数字都记录到极大值内，并且他们在后续不可能进入if num-1 not in hash（由于不是序列开头），所以每个数字只计算1次，O(n)
+                curLen+=1
+                num+=1
+            maxLen=max(maxLen,curLen)
 
-        # 检查容量
-        if len(self.dict) > self.capacity:
-            nodeToDelete = self.head.next  # 需要删除的LRU节点
-            self.remove(nodeToDelete)
-            del self.dict[nodeToDelete.key]
+    return maxLen
 
-    def add(self, node: DoublyLinkedList) -> None:  # 用于添加节点到链表中
-        realTail = self.tail.prev  # 找到真正的尾节点
-        realTail.next = node
-        node.prev = realTail
-        node.next = self.tail
-        self.tail.prev = node
 
-    def remove(self, node: DoublyLinkedList) -> None:  # 用于删除节点
-        node.prev.next = node.next
-        node.next.prev = node.prev
+
+
+
+if __name__ == '__main__':
+    print(longestConsecutive([100, 4, 200, 1, 3, 2]))
