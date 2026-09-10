@@ -1,53 +1,69 @@
+# 题目描述某操作系统采用 LRU 作为内存页面置换算法。
+# 假设初始内存为空，现给定将访问的内存页序列 pages, 序列长度 page_cnt 和内存总容量(页面数) mem，请返回缺页中断的次数。
+# 例如pages是[2,1, 2,3]，内存总容量mem 是 2，发生缺页中断次数是3次，因为首先 2,1进入时发生缺页，后续 2到来时 内存已有没有中断，
+# 3来了发生中断，一共 3 次，此时LRU需要1淘汰，把 3放进。
+
+# 要实现O(1)查找or删除：用双向链表
 class DoublyLinkedList:
-    def __init__(self, key: int, val: int):  # 用于实现O(1)增加、修改、删除节点
-        self.key = key
-        self.val = val
-        self.prev = None
-        self.next = None
+    def __init__(self,val: int, prev: None, next: None):
+        self.val=val
+        self.prev=prev
+        self.next=next
 
+class LRU:
+    def __init__(self, mem: int):
+        self.mem=mem
+        self.fault=0
+        self.dict=set()# hashMap实现O(1)的查询
+        # 虚拟头尾节点
+        self.dummyHead=DoublyLinkedList(-1)
+        self.dummyTail=DoublyLinkedList(-1)
+        self.dummyHead.next=self.dummyTail
+        self.dummyTail.prev=self.dummyHead
+        # dummyHead->      ->dummyTail
 
-class LRUCache:
+    def put(self, node:DoublyLinkedList):# 用于查询or新增节点
+        # 先检验当前节点是否已经在链表里了
+        if node not in self.dict:# 缺页
+            # 若不在，则fault+1，然后加入set
+            self.fault+=1
+            self.add(node)
+            self.dict.add(node)
 
-    def __init__(self, capacity: int):
-        self.capacity = capacity
-        self.dict = {}  # 用于O(1)查找节点，存储key->DoublyLinkedList，便于直接找到节点
-        self.head = DoublyLinkedList(-1, -1)  # 虚拟头节点
-        self.tail = DoublyLinkedList(-1, -1)  # 虚拟尾节点
-        self.head.next = self.tail
-        self.tail.prev = self.head
-
-    def get(self, key: int) -> int:
-        if key not in self.dict:  # 若不存在则返回-1
-            return -1
-        nodeToGet = self.dict[key]
-        # 先删除再新增，从而更新LRU
-        self.remove(nodeToGet)
-        self.add(nodeToGet)
-        # 最后返回val
-        return nodeToGet.val
-
-    def put(self, key: int, value: int) -> None:
-        if key in self.dict:  # 如果存在这个key
-            nodeToModify = self.dict[key]
-            self.remove(nodeToModify)
-        # 新增这个节点
-        newNode = DoublyLinkedList(key, value)
-        self.add(newNode)
-        self.dict[key] = newNode
-
-        # 检查容量
-        if len(self.dict) > self.capacity:
-            nodeToDelete = self.head.next  # 需要删除的LRU节点
+        # 如果存在
+        # 更新LRU
+        self.remove(node)
+        self.add(node)
+        2，1，2，3   1
+        # 检验长度
+        if len(self.dict)>self.mem:
+            # 先拿到链表头节点
+            nodeToDelete=self.dummyHead.next# 要去除的头节点
             self.remove(nodeToDelete)
-            del self.dict[nodeToDelete.key]
+            self.dict.remove(nodeToDelete)
 
-    def add(self, node: DoublyLinkedList) -> None:  # 用于添加节点到链表中
-        realTail = self.tail.prev  # 找到真正的尾节点
-        realTail.next = node
-        node.prev = realTail
-        node.next = self.tail
-        self.tail.prev = node
 
-    def remove(self, node: DoublyLinkedList) -> None:  # 用于删除节点
-        node.prev.next = node.next
-        node.next.prev = node.prev
+
+
+
+    # 辅助函数1：用于向链表里添加节点
+    def add(self, node:DoublyLinkedList):
+        # 找到链表尾部
+        realTail=self.dummyTail.prev# 真链表尾
+        # 原始尾节点和新node双向链接
+        realTail.next=node
+        node.prev=realTail
+        # 新node和dummyTail双向链接
+        self.dummyTail.prev=node
+        node.next=self.dummyTail
+
+    # 辅助函数2：用于向链表移除节点
+    def remove(self,node:DoublyLinkedList):
+        # 删除当前节点node
+        node.prev.next=node.next
+        node.next.prev=node.prev
+
+
+
+if __name__ == '__main__':
+    lru=
